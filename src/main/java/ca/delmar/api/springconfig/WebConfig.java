@@ -31,7 +31,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
     @Bean
-    public DataSource stagingOracleLookup() {
+    public DataSource oracleLookup() {
         try {
             InitialContext initialContext = new InitialContext();
             return (DataSource) initialContext.lookup("OracleDS");
