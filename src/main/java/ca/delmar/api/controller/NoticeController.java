@@ -4,6 +4,7 @@ import ca.delmar.api.domain.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,10 +27,16 @@ import java.util.List;
 public class NoticeController {
 
     private JdbcTemplate jdbcTemplate;
+    private LobHandler lobHandler;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+    @Autowired
+    public void setLobHandler(LobHandler lobHandler) {
+        this.lobHandler = lobHandler;
     }
 
     @RequestMapping(value = "/list")
@@ -52,12 +59,12 @@ public class NoticeController {
         return list;
     }
 
-    private static final class NoticeMapper implements RowMapper<Notice> {
+    private final class NoticeMapper implements RowMapper<Notice> {
         public Notice mapRow(ResultSet rs, int rowNum) throws SQLException {
             Notice result = new Notice();
-            result.id = rs.getString("id");
-            result.title = rs.getString("title");
-            result.html = rs.getString("html");
+            result.id = rs.getString("noticeid");
+            result.title = rs.getString("noticesubject");
+            result.html = lobHandler.getClobAsString(rs, "noticehtml");
             return result;
         }
     }

@@ -3,6 +3,8 @@ package ca.delmar.api.springconfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -31,6 +33,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
     @Bean
+    public LobHandler lobHandler() {
+        LobHandler lobHandler = new DefaultLobHandler();
+        return lobHandler;
+    }
+
+    @Bean
     public DataSource oracleLookup() {
         try {
             InitialContext initialContext = new InitialContext();
@@ -39,4 +47,5 @@ public class WebConfig extends WebMvcConfigurerAdapter {
             throw new RuntimeException("JNDI lookup failed.",e);
         }
     }
+
 }
