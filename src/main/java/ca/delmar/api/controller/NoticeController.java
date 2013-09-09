@@ -41,7 +41,8 @@ public class NoticeController {
 
     @RequestMapping(value = "/list")
     @ResponseBody
-    public List<Notice> getList(@RequestParam("lang") String language, @RequestParam("count") int count) {
+    public List<Notice> getList(@RequestParam("lang", defaultValue = "en") String language,
+                                @RequestParam("count", defaultValue = 20) int count) {
         int languageId = language.equalsIgnoreCase("en") ? 1 : 2;
         jdbcTemplate.setMaxRows(count);
         String query =
@@ -64,7 +65,8 @@ public class NoticeController {
             Notice result = new Notice();
             result.id = rs.getString("noticeid");
             result.title = rs.getString("noticesubject");
-            result.html = lobHandler.getClobAsString(rs, "noticehtml");
+            result.date = rs.getDate("DATESENT");
+            // result.html = lobHandler.getClobAsString(rs, "noticehtml");
             return result;
         }
     }

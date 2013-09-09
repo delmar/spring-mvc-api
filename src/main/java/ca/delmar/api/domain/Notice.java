@@ -1,6 +1,7 @@
 package ca.delmar.api.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,5 +13,6 @@ import java.io.Serializable;
 public class Notice implements Serializable {
     public String id;
     public String title;
-    public String html;
+    public Date date;
+    // public String html;
 }
