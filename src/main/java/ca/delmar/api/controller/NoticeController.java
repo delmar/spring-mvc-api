@@ -41,20 +41,11 @@ public class NoticeController {
 
     @RequestMapping(value = "/list")
     @ResponseBody
-    public List<Notice> getList(@RequestParam(value = "lang", required = false, defaultValue = "en") String language,
-                                @RequestParam(value = "count", required = false, defaultValue = "20") int count) {
+    public List<Notice> getJsonList(@RequestParam(value = "lang",  required = false, defaultValue = "en") String language,
+                                    @RequestParam(value = "count", required = false, defaultValue = "20") int count) {
         int languageId = language.equalsIgnoreCase("en") ? 1 : 2;
         jdbcTemplate.setMaxRows(count);
-        String query =
-                "SELECT n.* " +
-                        "  FROM TBLNOTICE n " +
-                        "  WHERE n.LANGUAGEID = :languageId " +
-                        "AND n.ISACTIVE       = 1 " +
-                        "AND n.ISTEMPLATE     = 0 " +
-                        "AND n.NOTICEPRIVATE  = 0 " +
-                        "AND n.NOTICEDRAFT    = 0 " +
-                        "AND n.DATESENT      IS NOT NULL " +
-                        "ORDER BY n.DATESENT DESC";
+        String query = "SELECT n.*   FROM TBLNOTICE n   WHERE n.LANGUAGEID = :languageId AND n.ISACTIVE       = 1 AND n.ISTEMPLATE     = 0 AND n.NOTICEPRIVATE  = 0 AND n.NOTICEDRAFT    = 0 AND n.DATESENT      IS NOT NULL ORDER BY n.DATESENT DESC";
         List<Notice> list = jdbcTemplate.query(query, new Object[]{languageId}, new NoticeMapper());
         jdbcTemplate.setMaxRows(0);
         return list;
