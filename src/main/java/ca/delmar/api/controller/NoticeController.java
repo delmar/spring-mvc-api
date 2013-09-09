@@ -41,8 +41,8 @@ public class NoticeController {
 
     @RequestMapping(value = "/list")
     @ResponseBody
-    public List<Notice> getList(@RequestParam("lang", defaultValue = "en") String language,
-                                @RequestParam("count", defaultValue = 20) int count) {
+    public List<Notice> getList(@RequestParam(value = "lang", required = false, defaultValue = "en") String language,
+                                @RequestParam(value = "count", required = false, defaultValue = "20") int count) {
         int languageId = language.equalsIgnoreCase("en") ? 1 : 2;
         jdbcTemplate.setMaxRows(count);
         String query =
