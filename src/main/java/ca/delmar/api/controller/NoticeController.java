@@ -2,6 +2,7 @@ package ca.delmar.api.controller;
 
 import ca.delmar.api.domain.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.lob.LobHandler;
@@ -43,6 +44,10 @@ public class NoticeController {
     @ResponseBody
     public List<Notice> getJsonList(@RequestParam(value = "lang",  required = false, defaultValue = "en") String language,
                                     @RequestParam(value = "count", required = false, defaultValue = "20") int count) {
+        return getList(language, count);
+    }
+
+    private List<Notice> getList(String language, int count) {
         int languageId = language.equalsIgnoreCase("en") ? 1 : 2;
         jdbcTemplate.setMaxRows(count);
         String query = "SELECT n.*   FROM TBLNOTICE n   WHERE n.LANGUAGEID = :languageId AND n.ISACTIVE       = 1 AND n.ISTEMPLATE     = 0 AND n.NOTICEPRIVATE  = 0 AND n.NOTICEDRAFT    = 0 AND n.DATESENT      IS NOT NULL ORDER BY n.DATESENT DESC";
